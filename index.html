@@ -30,7 +30,7 @@
 					<label><input type="radio" id="SearchMethodFromTIDTrend" name="SearchMethod" value="fromTIDTrend" checked="checked">表IDと流行語から</label><br />
 					<label><input type="radio" id="SearchMethodFromTID" name="SearchMethod" value="fromTID">表IDから</label><br />
 					<label><input type="radio" id="SearchMethodFromPoint" name="SearchMethod" value="fromPoint">釣りポイントから</label>
-					<input type="number" id="SearchPoint" name="SearchPoint" value="4" min="4" max="447">
+					<label><input type="number" id="SearchPoint" name="SearchPoint" value="4" min="4" max="447">（4～447）</label>
 				</fieldset>
 				<fieldset>
 					<legend>初期シード（電池切れRSの場合は000005A0で固定）</legend>
@@ -222,6 +222,12 @@
 					</select></label></p>
 				</fieldset>
 				<fieldset>
+					<legend>初期データセットにかかるフレーム数</legend>
+					<label>VBlank乱数消費数:<input type="number" id="VBlankCount" name="VBlankCount" value="3" min="0" max="5"></label><br />
+					実機・ポケモンボックス等のエミュレータなど、プレイ環境によって前後する可能性がある。<br />
+					2～4の間で調整してください。
+				</fieldset>
+				<fieldset>
 					<legend>検索結果</legend>
 					<table>
 						<thead id="resultTableHead">
@@ -242,13 +248,14 @@
 		候補のうちのいずれかが、ヒンバスの出現ポイントである可能性があります。<br />
 		出現ポイントでは50%でヒンバス、50%で通常の釣りエンカテーブルから抽選なので、一発でヒンバスが釣れなくても諦めないこと。</p>
 		<p>「流行語待機f」は、表ID決定から流行語生成までの間に、いくつの乱数が消費されたのかを表します。<br />
-		ルビー・サファイアであれば2～4、エメラルドは500以上になると思います。<br />
-		「釣り乱数」は、ヒンバスの釣れる位置の決定に使われる乱数です。<br />
-		この乱数が同じであれば、他の条件が異なっていても釣れる位置は同じになります。<br />
-		「IDくじ」は、ミナモデパート1FのIDくじの番号を表します。<br />
-		同じ流行語で違う釣り乱数候補が見つかったときに、くじの番号を確認することで絞り込むことができます。<br />
-		「推定SID」は、エメラルドの裏IDを推定できるかもしれない可能性がある機能です。<br />
-		初期化処理にかかった時間によって裏ID乱数がずれるので、参考程度に。</p>
+		ルビー・サファイアであれば2～4、エメラルドは500以上になると思います。</p>
+		<p>「釣り乱数」は、ヒンバスの釣れる位置の決定に使われる乱数です。<br />
+		この乱数が同じであれば、他の条件が異なっていても釣れる位置は同じになります。</p>
+		<p>「IDくじ」は、ミナモデパート1FのIDくじの番号を表します。<br />
+		同じ流行語で違う釣り乱数候補が見つかったときに、くじの番号を確認することで絞り込むことができます。</p>
+		<p>「推定SID」は、エメラルドの裏IDを推定できるかもしれない可能性がある機能です。<br />
+		初期化処理にかかった時間によって裏ID乱数がずれるので、参考程度に。<br />
+		「初期データセットにかかるフレーム数」を変えると正確な結果が出るかもしれません。</p>
 		<h2>調査メモ</h2>
 		<p>RSの初期シードは電源投入直後、RTCの内部状態をもとに生成される。裏ID、表IDは連続する2つの乱数で決定される。<br />
 		RTCは内蔵電池が切れていれば初期シードを固定でき、その場合は000005A0が初期シードとなる。<br />

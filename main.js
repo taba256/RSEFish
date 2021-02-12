@@ -2,7 +2,7 @@ import * as UI from "./modules/ui.js";
 import * as Poke from "./modules/pokemon.js";
 
 const RS_ID_SEARCH_MAX = 50000;
-const RS_TREND_SEARCH_MAX = 10;
+const RS_TREND_SEARCH_MAX = 5;
 const E_TREND_SEARCH_MAX = 1000;
 let searching=false;
 
@@ -14,6 +14,7 @@ async function startSearchCB(){
 	const gameVersion=UI.getGameVersion();
 	const searchMethod=UI.getSearchMethod();
 	const [trend1,trend2]=UI.getTrends();
+	const vblank=UI.getSearchVBlankCount();
 	if(gameVersion=="RS"){
 		UI.updateResultTableHead(["←","ID消費f","TID","SID","流行語待機f","流行語1","流行語2","釣り乱数","IDくじ"]);
 		UI.initResultTableBody();
@@ -42,7 +43,7 @@ async function startSearchCB(){
 				const rand_tmp=new Poke.GPRNG(rand.seed);
 				const tid_temp=rand_tmp.next();
 				if(tid==tid_temp){	//表IDが指定したものと一致するなら流行語生成チェックに入る
-					const results=(await Poke.searchSimple(rand_tmp.seed,3,4)).filter(result=>result[0]==3);	//裏ID決定から5個以内の乱数のうち、2～4
+					const results=(await Poke.searchSimple(rand_tmp.seed,vblank,vblank+1)).filter(result=>result[0]==vblank);	//裏ID決定から指定個以内の乱数
 					results.forEach(result=>{
 						UI.updateResultTableBody([null,i,tid,sid_temp,result[0],Poke.getTrendWordById(result[1].words[0]),Poke.getTrendWordById(result[1].words[1]),result[1].fishSeed.toString(16).padStart(4,"0"),result[2]],
 							()=>{
@@ -66,7 +67,7 @@ async function startSearchCB(){
 				const sid_temp=rand.next();	//裏ID生成
 				const rand_tmp=new Poke.GPRNG(rand.seed);
 				const tid_temp=rand_tmp.next();
-				const result=(await Poke.searchSimple(rand_tmp.seed,3,4)).filter(result=>result[0]==3)[0];
+				const result=(await Poke.searchSimple(rand_tmp.seed,vblank,vblank+1)).filter(result=>result[0]==vblank)[0];
 				if(seeds[result[1].fishSeed]){
 					UI.updateResultTableBody([null,i,tid_temp,sid_temp,result[0],Poke.getTrendWordById(result[1].words[0]),Poke.getTrendWordById(result[1].words[1]),result[1].fishSeed.toString(16).padStart(4,"0"),result[2]],
 						()=>{
@@ -84,7 +85,7 @@ async function startSearchCB(){
 			const results=await Poke.searchByTrends(tidseed,trend1,trend2,E_TREND_SEARCH_MAX);	//表ID決定からE_TREND_SEARCH_MAX個以内の乱数のうち、指定した流行語になる乱数を探す
 			results.forEach(result=>{
 				const sidrand=new Poke.GPRNG(tidseed);
-				const cnt=result[0]-4;//仮。裏ID生成の1個+初期化処理3フレームで4としているが、初期化時間にばらつきがあるかもしれないので要注意
+				const cnt=result[0]-(1+vblank);//裏ID生成の1個+VBlankフレーム数
 				for(let i=0;i<cnt;i++){
 					sidrand.next();
 				}
@@ -98,7 +99,7 @@ async function startSearchCB(){
 			const results=await Poke.searchSimple(tidseed,500,E_TREND_SEARCH_MAX);
 			results.forEach(result=>{
 				const sidrand=new Poke.GPRNG(tidseed);
-				const cnt=result[0]-4;//仮。裏ID生成の1個+初期化処理3フレームで4としているが、初期化時間にばらつきがあるかもしれないので要注意
+				const cnt=result[0]-(1+vblank);//裏ID生成の1個+VBlankフレーム数
 				for(let i=0;i<cnt;i++){
 					sidrand.next();
 				}
@@ -122,7 +123,7 @@ async function startSearchCB(){
 			results.forEach(result=>{
 				if(seeds[result[1].fishSeed]){
 					const sidrand=new Poke.GPRNG(tidseed);
-					const cnt=result[0]-4;//仮。裏ID生成の1個+初期化処理3フレームで4としているが、初期化時間にばらつきがあるかもしれないので要注意
+					const cnt=result[0]-(1+vblank);//裏ID生成の1個+VBlankフレーム数
 					for(let i=0;i<cnt;i++){
 						sidrand.next();
 					}

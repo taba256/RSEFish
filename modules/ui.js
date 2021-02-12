@@ -11,6 +11,9 @@ const getGameVersion=()=>{
 const getSearchMethod=()=>{
 	return document.searchForm.SearchMethod.value;
 };
+const getSearchVBlankCount=()=>{
+	return parseInt(document.searchForm.VBlankCount.value);
+};
 const getSearchPoint=()=>{
 	return parseInt(document.searchForm.SearchPoint.value);
 };
@@ -85,4 +88,4 @@ const plotFishingPoint=(points)=>{
 	});
 };
 
-export {UIInit,getGameVersion,getSearchMethod,getSearchPoint,getTID,getSeed,getTrends,updateResultTableHead,initResultTableBody,updateResultTableBody,plotFishingPoint};
+export {UIInit,getGameVersion,getSearchMethod,getSearchVBlankCount,getSearchPoint,getTID,getSeed,getTrends,updateResultTableHead,initResultTableBody,updateResultTableBody,plotFishingPoint};
