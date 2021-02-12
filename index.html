@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="ja">
+	<head>
+		<meta charset="UTF-8">
+		<title>ヒンバスの出現位置を推測できるかもしれないツール</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script type="module" src="main.js"></script>
+	</head>
+	<body>
+		<div class="flexBox">
+			<div id="R119MapBox">
+				<img src="images/r119.png">
+				<div id="fish-1" class="HinBassPoint"></div>
+				<div id="fish-2" class="HinBassPoint"></div>
+				<div id="fish-3" class="HinBassPoint"></div>
+				<div id="fish-4" class="HinBassPoint"></div>
+				<div id="fish-5" class="HinBassPoint"></div>
+				<div id="fish-6" class="HinBassPoint"></div>
+			</div>
+			<form name="searchForm" action="javascript:void(0);">
+				<h1>ヒンバスの出現位置を推測できるかもしれないツール</h1>
+				<button id="startSearch">検索開始</button>
+				<fieldset>
+					<legend>バージョン</legend>
+					<label><input type="radio" id="GameVersionRS" name="GameVersion" value="RS">ルビー・サファイア</label>
+					<label><input type="radio" id="GameVersionE" name="GameVersion" value="E" checked="checked">エメラルド</label>
+				</fieldset>
+				<fieldset>
+					<legend>検索方法</legend>
+					<label><input type="radio" id="SearchMethodFromTIDTrend" name="SearchMethod" value="fromTIDTrend" checked="checked">表IDと流行語から</label><br />
+					<label><input type="radio" id="SearchMethodFromTID" name="SearchMethod" value="fromTID">表IDから</label><br />
+					<label><input type="radio" id="SearchMethodFromPoint" name="SearchMethod" value="fromPoint">釣りポイントから</label>
+					<input type="number" id="SearchPoint" name="SearchPoint" value="4" min="4" max="447">
+				</fieldset>
+				<fieldset>
+					<legend>初期シード（電池切れRSの場合は000005A0で固定）</legend>
+					<label>0x<input type="text" id="InitialSeed" name="InitialSeed" pattern="^[0-9A-Fa-f]{8}$" placeholder="000005A0" value="000005A0">（エメラルドは常に00000000）</label>
+				</fieldset>
+				<fieldset>
+					<legend>トレーナーID（00000-65535）</legend>
+					<label>表ID:<input type="text" id="TID" name="TID" pattern="^[0-9]{1,5}$" placeholder="12345" required>（入力必須）</label>
+				</fieldset>
+				<fieldset>
+					<legend>ムロタウンの流行語</legend>
+					<p><label>流行語1:<select id="TrendWord1" name="TrendWord1" required>
+						<optgroup label="じょうたい">
+							<option value="5120">あつい</option>
+							<option value="5121">あった</option>
+							<option value="5122">あまり</option>
+							<option value="5123">あり</option>
+							<option value="5124">ある</option>
+							<option value="5125">いい</option>
+							<option value="5126">いか</option>
+							<option value="5127">いきおい</option>
+							<option value="5128">いける</option>
+							<option value="5129">いじょう</option>
+							<option value="5130">いそがしい</option>
+							<option value="5131">いっしょに</option>
+							<option value="5132">いっぱい</option>
+							<option value="5133">いない</option>
+							<option value="5134">いや</option>
+							<option value="5135">いる</option>
+							<option value="5136">うまい</option>
+							<option value="5137">うまく</option>
+							<option value="5138">うるさい</option>
+							<option value="5139">おおきい</option>
+							<option value="5140">おくれ</option>
+							<option value="5141">おしい</option>
+							<option value="5142">おとなしい</option>
+							<option value="5143">おもしろい</option>
+							<option value="5144">おもしろく</option>
+							<option value="5145">かんぺき</option>
+							<option value="5146">けっこう</option>
+							<option value="5147">げんき</option>
+							<option value="5148">さいこう</option>
+							<option value="5149">さかさま</option>
+							<option value="5150">さむい</option>
+							<option value="5151">さわやか</option>
+							<option value="5152">しかたない</option>
+							<option value="5153">すごい</option>
+							<option value="5154">すごすぎ</option>
+							<option value="5155">すてき</option>
+							<option value="5156">たいした</option>
+							<option value="5157">たかい</option>
+							<option value="5158">ただしい</option>
+							<option value="5159">だめ</option>
+							<option value="5160">ちいさい</option>
+							<option value="5161">ちがう</option>
+							<option value="5162">つかれ</option>
+							<option value="5163">とくい</option>
+							<option value="5164">トップ</option>
+							<option value="5165">とまらない</option>
+							<option value="5166">とんでもない</option>
+							<option value="5167">ない</option>
+							<option value="5168">なかった</option>
+							<option value="5169">なし</option>
+							<option value="5170">なって</option>
+							<option value="5171">ぬるい</option>
+							<option value="5172">はやい</option>
+							<option value="5173">ひくい</option>
+							<option value="5174">ひどい</option>
+							<option value="5175">ひとりで</option>
+							<option value="5176">ひま</option>
+							<option value="5177">ひみつ</option>
+							<option value="5178">ふしぎ</option>
+							<option value="5179">ふそく</option>
+							<option value="5180">ベスト</option>
+							<option value="5181">へた</option>
+							<option value="5182">まちがって</option>
+							<option value="5183">やさしい</option>
+							<option value="5184">よく</option>
+							<option value="5185">よわって</option>
+							<option value="5186">らく</option>
+							<option value="5187">らしい</option>
+							<option value="5188">わるい</option>
+						</optgroup>
+					</select></label></p>
+					<p><label>流行語2:<select id="TrendWord2" name="TrendWord2" required>
+						<optgroup label="せいかつ">
+							<option value="6144">アルバイト</option>
+							<option value="6145">うち</option>
+							<option value="6146">おかね</option>
+							<option value="6147">おこづかい</option>
+							<option value="6148">おふろ</option>
+							<option value="6149">かいわ</option>
+							<option value="6150">がっこう</option>
+							<option value="6151">きねん</option>
+							<option value="6152">くせ</option>
+							<option value="6153">グループ</option>
+							<option value="6154">ことば</option>
+							<option value="6155">コンビニ</option>
+							<option value="6156">サービス</option>
+							<option value="6157">しごと</option>
+							<option value="6158">システム</option>
+							<option value="6159">しゅぎょう</option>
+							<option value="6160">じゅぎょう</option>
+							<option value="6161">じゅく</option>
+							<option value="6162">じょうほう</option>
+							<option value="6163">せいかつ</option>
+							<option value="6164">せんせい</option>
+							<option value="6165">たいかい</option>
+							<option value="6166">てがみ</option>
+							<option value="6167">できごと</option>
+							<option value="6168">デジタル</option>
+							<option value="6169">テスト</option>
+							<option value="6170">デパート</option>
+							<option value="6171">テレビ</option>
+							<option value="6172">でんわ</option>
+							<option value="6173">どうぐ</option>
+							<option value="6174">なまえ</option>
+							<option value="6175">ニュース</option>
+							<option value="6176">にんき</option>
+							<option value="6177">パーティー</option>
+							<option value="6178">べんきょう</option>
+							<option value="6179">マシン</option>
+							<option value="6180">メール</option>
+							<option value="6181">メッセージ</option>
+							<option value="6182">やくそく</option>
+							<option value="6183">ゆめ</option>
+							<option value="6184">ようちえん</option>
+							<option value="6185">ライフ</option>
+							<option value="6186">ラジオ</option>
+							<option value="6187">レンタル</option>
+							<option value="6188">ワールド</option>
+						</optgroup>
+						<optgroup label="しゅみ">
+							<option value="6656">アイドル</option>
+							<option value="6657">アニメ</option>
+							<option value="6658">うた</option>
+							<option value="6659">えいが</option>
+							<option value="6660">おかし</option>
+							<option value="6661">おしゃべり</option>
+							<option value="6662">おままどと</option>
+							<option value="6663">おもちゃ</option>
+							<option value="6664">おんがく</option>
+							<option value="6665">カード</option>
+							<option value="6666">かいもの</option>
+							<option value="6667">カメラ</option>
+							<option value="6668">かんしょう</option>
+							<option value="6669">かんせん</option>
+							<option value="6670">グルメ</option>
+							<option value="6671">ゲーム</option>
+							<option value="6672">ごっこ</option>
+							<option value="6673">コレクション</option>
+							<option value="6674">コンプリート</option>
+							<option value="6675">ざっし</option>
+							<option value="6676">さんぽ</option>
+							<option value="6677">じてんしゃ</option>
+							<option value="6678">しゅみ</option>
+							<option value="6679">スポーツ</option>
+							<option value="6680">ソフト</option>
+							<option value="6681">ソング</option>
+							<option value="6682">ダイエット</option>
+							<option value="6683">たからもの</option>
+							<option value="6684">たび</option>
+							<option value="6685">ダンス</option>
+							<option value="6686">チャンネル</option>
+							<option value="6687">つくり</option>
+							<option value="6688">つり</option>
+							<option value="6689">デート</option>
+							<option value="6690">デザイン</option>
+							<option value="6691">でんしゃ</option>
+							<option value="6692">ぬいぐるみ</option>
+							<option value="6693">パソコン</option>
+							<option value="6694">はな</option>
+							<option value="6695">ヒーロー</option>
+							<option value="6696">ひるね</option>
+							<option value="6697">ヒロイン</option>
+							<option value="6698">ファッション</option>
+							<option value="6699">ぼうけん</option>
+							<option value="6700">ボード</option>
+							<option value="6701">ボール</option>
+							<option value="6702">ほん</option>
+							<option value="6703">まつり</option>
+							<option value="6704">まんが</option>
+							<option value="6705">やすみ</option>
+							<option value="6706">よてい</option>
+							<option value="6707">りゅうこう</option>
+							<option value="6708">りょこう</option>
+							<option value="6709">ルック</option>
+						</optgroup>
+					</select></label></p>
+				</fieldset>
+				<fieldset>
+					<legend>検索結果</legend>
+					<table>
+						<thead id="resultTableHead">
+						</thead>
+						<tbody id="resultTableBody">
+						</tbody>
+					</table>
+				</fieldset>
+			</form>
+		</div>
+		<h2>つかいかた</h2>
+		<p>ポケットモンスター　ルビー・サファイア・エメラルドを起動し、「さいしょから　はじめる」を選びます。<br />
+		ルビー・サファイアの場合、内蔵時計の電池が切れているか、リアルタイムクロックの内部状態が既知である必要があります。<br />
+		主人公の名前を決定して普通にゲームを開始し、ムロタウンまで進めます。<br />
+		ムロジムの右にいる釣り人から、ボロのつりざおをもらいましょう。他の釣り竿で釣る予定なら不要です。<br />
+		ポケモンセンターの北にいる人に話しかけ、流行語を確認します。<br />
+		トレーナーID、流行語をこのツールに入力し、検索開始ボタンを押します。<br />
+		候補のうちのいずれかが、ヒンバスの出現ポイントである可能性があります。<br />
+		出現ポイントでは50%でヒンバス、50%で通常の釣りエンカテーブルから抽選なので、一発でヒンバスが釣れなくても諦めないこと。</p>
+		<p>「流行語待機f」は、表ID決定から流行語生成までの間に、いくつの乱数が消費されたのかを表します。<br />
+		ルビー・サファイアであれば2～4、エメラルドは500以上になると思います。<br />
+		「釣り乱数」は、ヒンバスの釣れる位置の決定に使われる乱数です。<br />
+		この乱数が同じであれば、他の条件が異なっていても釣れる位置は同じになります。<br />
+		「IDくじ」は、ミナモデパート1FのIDくじの番号を表します。<br />
+		同じ流行語で違う釣り乱数候補が見つかったときに、くじの番号を確認することで絞り込むことができます。<br />
+		「推定SID」は、エメラルドの裏IDを推定できるかもしれない可能性がある機能です。<br />
+		初期化処理にかかった時間によって裏ID乱数がずれるので、参考程度に。</p>
+		<h2>調査メモ</h2>
+		<p>RSの初期シードは電源投入直後、RTCの内部状態をもとに生成される。裏ID、表IDは連続する2つの乱数で決定される。<br />
+		RTCは内蔵電池が切れていれば初期シードを固定でき、その場合は000005A0が初期シードとなる。<br />
+		Eの初期シードは00000000固定だが、最初から始めた場合に限り名前決定時に16bitハードウェアタイマの値で初期化される。人力での制御は困難。<br />
+		オダマキ博士の最後のセリフを送ったタイミングでRSは裏表ID、Eでは裏IDが乱数により決定。<br />
+		同時に各種データの初期化が行われる。IDだけでなくムロタウン流行語とヒンバス釣り乱数の初期状態もここで決定。<br />
+		通常のポケモン個体生成乱数のメソッドずれ現象と同様の理由で、初期化処理中に2～4個の乱数が消費される（3個であることが多いが、確実なことは言えない）ので、ID生成の乱数シード値が特定できたところで、流行語生成のシード値までは特定困難となる。<br />
+		とはいえ消費量が大きく変動するわけではないので、ID決定乱数からあまり離れていない乱数が流行語生成乱数であることは確かである。<br />
+		よって、電池切れRSかEを最初から始め、流行語が変わるまでに釣りを始めた場合に限り、ヒンバスの位置を推定できる。<br />
+		また流行語決定の直後にIDくじの抽選もあるため、違う乱数が同じ流行語になってしまい乱数の特定が困難な場合に、IDくじを引くことで絞り込める。</p>
+	</body>
+</html>
